@@ -8,11 +8,10 @@ Created on Mon Mar  8 18:13:55 2021
 This is an example of the proper usage for the datareader.py file
 """
 
-import generalanalysis
+import datareader as dr
 
 
 def main():
-    dr = generalanalysis.datareader
 
     start = '2021-02-02'
     end = '2021-03-05'
