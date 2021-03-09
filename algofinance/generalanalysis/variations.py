@@ -93,8 +93,9 @@ dates, closes = BTC.Dates, BTC.Closes
 
 BTCVariations = Variations(dates, closes, normalized=True)
 
-# plt.plot(BTCVariations.Dates, BTCVariations.Closes)
+# plt.bar(BTCVariations.Dates, BTCVariations.Closes)
 print(BTCVariations.Closes)
+print(BTCVariations.Dates)
 
 """
 Need way to grab the from shifted lists for plotting, but don't

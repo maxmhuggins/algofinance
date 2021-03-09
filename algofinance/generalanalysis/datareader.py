@@ -65,18 +65,21 @@ class DataReader:
 
         Closes = data[TimeFormats[self.Source]['Close']].values.tolist()
         Dates = data[TimeFormats[self.Source]['Timestamp']].values.tolist()
-        Dates = [Dates[date]/1e6 for date in range(0, len(Dates))]
+        # Dates = [Dates[date]/1e12 for date in range(0, len(Dates))]
 
         return np.array(Dates), np.array(Closes)
 
     def binance_extractor(self):
 
         start = time.strptime('{}'.format(self.DateRange[0]), self.TimeFormat)
+        # print(start)
         end = time.strptime('{}'.format(self.DateRange[1]), self.TimeFormat)
         start = time.mktime(start)
+        # print(start)
         end = time.mktime(end)
 
         start = time.strftime(self.TimeFormat, time.gmtime(start))
+        # print(start)
         end = time.strftime(self.TimeFormat, time.gmtime(end))
         klines = self.BClient.get_historical_klines(self.Symbol,
                                                     self.Interval,
@@ -91,6 +94,7 @@ class DataReader:
         Closes = data[TimeFormats[self.Source]['Close']].values.tolist()
         Closes = [float(Closes[close]) for close in range(0, len(Closes))]
         Dates = data[TimeFormats[self.Source]['Timestamp']].values.tolist()
+        # Dates = [Dates[date]/1e6 for date in range(0, len(Dates))]
 
         return np.array(Dates), np.array(Closes)
 
