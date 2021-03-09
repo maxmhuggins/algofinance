@@ -1,4 +1,4 @@
-#algofinance
+# algofinance
 
 This is a project with the purpose of developing an algorithm trading bot in Python.
 
