@@ -10,11 +10,17 @@ This is an example of the proper usage for the datareader.py file
 
 import generalanalysis
 
-dr = generalanalysis.datareader
 
-start = '2021-02-02'
-end = '2021-03-05'
-dates = (start, end)
-BTC = dr.DataReader('BTCUSDT', 'binance', dates, '1d')
-TSLA = dr.DataReader('TSLA', 'yahoo', dates, '1d')
-print('BTC:', BTC.Dates, '\n', 'TSLA:', TSLA.Dates)
+def main():
+    dr = generalanalysis.datareader
+
+    start = '2021-02-02'
+    end = '2021-03-05'
+    dates = (start, end)
+    BTC = dr.DataReader('BTCUSDT', 'binance', dates, '1d')
+    TSLA = dr.DataReader('TSLA', 'yahoo', dates, '1d')
+    print('BTC:', BTC.Dates, '\n', 'TSLA:', TSLA.Dates)
+
+
+if __name__ == '__main__':
+    main()
