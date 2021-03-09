@@ -101,13 +101,6 @@ class DataReader:
             self.Dates, self.Closes = self.binance_extractor()
 
 
-start = '2021-02-02'
-end = '2021-03-05'
-dates = (start, end)
-BTC = DataReader('BTCUSDT', 'binance', dates, './', '1d')
-TSLA = DataReader('TSLA', 'yahoo', dates, './', '1d')
-print('BTC:', BTC.Dates, '\n', 'TSLA:', TSLA.Dates)
-
 """
 - Fix the slowness and optimize a little
 
