@@ -12,10 +12,8 @@ gather data for analysis
 """
 
 import numpy as np
-import datareader as dr
 import matplotlib.pyplot as plt
 plt.style.use('classic')
-
 
 
 class Variations:
@@ -50,21 +48,7 @@ class Variations:
             shifted_dates.append(self.Dates[i]-self.Dates[0])
 
         return shifted_dates, shifted_closes
-    """
-    this needs some work, but I think I can use it to also display shifted,
-    gain values from a start date
-    
-        def normalizer(self):
-            shifted_dates, shifted_closes = self.shifter()
-    
-            normal_closes = []
-    
-            for i in range(0, len(shifted_dates)):
-                new_normal_value = closes[i] / self.Closes[i]
-                normal_closes.append(new_normal_value)
-    
-            return shifted_dates, normal_closes
-    """
+
     def normalized_variations(self):
         dates, closes = self.Dates, self.Closes
 
@@ -89,24 +73,8 @@ class Variations:
             return self.normalized_variations()
 
 
-start = '2021-02-02'
-end = '2021-03-05'
-dates = (start, end)
-BTC = dr.DataReader('TSLA', 'yahoo', dates, '1d')
-
-dates, closes = BTC.Dates, BTC.Closes
-
-BTCVariations = Variations(dates, closes)
-
-plt.bar(BTCVariations.Dates, BTCVariations.Variations, color = 'blue')
-plt.xlim(BTCVariations.Dates[0],BTCVariations.Dates[-1])
-plt.show()
-
-plt.plot(BTCVariations.ShiftedDates, BTCVariations.ShiftedCloses)
-# print(BTCVariations.Variations)
-# print(BTCVariations.Dates)
-
 """
 Need way to grab the from shifted lists for plotting, but don't
 want to have to run the function twice to get them
+    Maybe this should just be a seperate class?
 """

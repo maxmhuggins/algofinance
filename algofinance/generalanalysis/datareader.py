@@ -32,23 +32,7 @@ TimeFormats = {
         'Date': '%Y-%m-%d %H:%M:%S', 'Close': 'close', 'Timestamp': 'timestamp'
         }
     }
-"""
-    KLINE_INTERVAL_1MINUTE = '1m'
-    KLINE_INTERVAL_3MINUTE = '3m'
-    KLINE_INTERVAL_5MINUTE = '5m'
-    KLINE_INTERVAL_15MINUTE = '15m'
-    KLINE_INTERVAL_30MINUTE = '30m'
-    KLINE_INTERVAL_1HOUR = '1h'
-    KLINE_INTERVAL_2HOUR = '2h'
-    KLINE_INTERVAL_4HOUR = '4h'
-    KLINE_INTERVAL_6HOUR = '6h'
-    KLINE_INTERVAL_8HOUR = '8h'
-    KLINE_INTERVAL_12HOUR = '12h'
-    KLINE_INTERVAL_1DAY = '1d'
-    KLINE_INTERVAL_3DAY = '3d'
-    KLINE_INTERVAL_1WEEK = '1w'
-    KLINE_INTERVAL_1MONTH = '1M'
-    """
+
 TimeUnits = {'1M': 60*60*24*7*30, '1w': 60*60*24*7, '3d': 60*60*24*3,
              '1d': 60*60*24, '12h': 60*60*12, '1h': 60*60, '1m': 60
              }
@@ -92,14 +76,11 @@ class DataReader:
     def binance_extractor(self):
 
         start = time.strptime('{}'.format(self.DateRange[0]), self.TimeFormat)
-        # print(start)
         end = time.strptime('{}'.format(self.DateRange[1]), self.TimeFormat)
         start = time.mktime(start)
-        # print(start)
         end = time.mktime(end)
 
         start = time.strftime(self.TimeFormat, time.gmtime(start))
-        # print(start)
         end = time.strftime(self.TimeFormat, time.gmtime(end))
         klines = self.BClient.get_historical_klines(self.Symbol,
                                                     self.Interval,

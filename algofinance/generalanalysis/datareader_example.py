@@ -5,7 +5,7 @@ Created on Mon Mar  8 18:13:55 2021
 
 @author: maxmhuggins
 
-This is an example of the proper usage for the datareader.py file
+This is an example of the proper usage for the DataReader class
 """
 
 import datareader as dr
