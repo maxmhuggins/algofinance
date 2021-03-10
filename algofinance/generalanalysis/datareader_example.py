@@ -13,7 +13,7 @@ import datareader as dr
 
 def main():
 
-    start = '2021-02-02'
+    start = '2021-03-02'
     end = '2021-03-05'
     dates = (start, end)
     BTC = dr.DataReader('BTCUSDT', 'binance', dates, '1d')
