@@ -40,12 +40,13 @@ TimeUnits = {'1M': 60*60*24*7*30, '1w': 60*60*24*7, '3d': 60*60*24*3,
 
 class DataReader:
 
-    def __init__(self, symbol, source, daterange, interval):
+    def __init__(self, symbol, source, daterange, tick='1d', timeunit='1d'):
 
         self.Symbol = symbol
         self.Source = source
-        self.Interval = interval
+        self.Tick = tick
         self.DateRange = daterange
+        self.TimeUnit = TimeUnits[timeunit]
         self.TimeFormat = '%Y-%m-%d'
         self.APIKey = (***REMOVED***
 ***REMOVED***)
@@ -59,7 +60,7 @@ class DataReader:
         start = time.strptime('{}'.format(self.DateRange[0]), self.TimeFormat)
         end = time.strptime('{}'.format(self.DateRange[1]), self.TimeFormat)
         start = time.mktime(start)
-        end = time.mktime(end) + (TimeUnits[self.Interval])
+        end = time.mktime(end) + (TimeUnits[self.Tick])
 
         start = time.strftime(self.TimeFormat, time.gmtime(start))
         end = time.strftime(self.TimeFormat, time.gmtime(end))
@@ -69,7 +70,8 @@ class DataReader:
 
         Closes = data[TimeFormats[self.Source]['Close']].values.tolist()
         Dates = data[TimeFormats[self.Source]['Timestamp']].values.tolist()
-        # Dates = [Dates[date]/1e12 for date in range(0, len(Dates))]
+        Dates = [Dates[date]/1e9 for date in range(0, len(Dates))]
+        Dates = [Dates[date]/self.TimeUnit for date in range(0, len(Dates))]
 
         return np.array(Dates), np.array(Closes)
 
@@ -83,7 +85,7 @@ class DataReader:
         start = time.strftime(self.TimeFormat, time.gmtime(start))
         end = time.strftime(self.TimeFormat, time.gmtime(end))
         klines = self.BClient.get_historical_klines(self.Symbol,
-                                                    self.Interval,
+                                                    self.Tick,
                                                     start, end, 1000)
 
         data = pd.DataFrame(klines, columns=[
@@ -95,7 +97,8 @@ class DataReader:
         Closes = data[TimeFormats[self.Source]['Close']].values.tolist()
         Closes = [float(Closes[close]) for close in range(0, len(Closes))]
         Dates = data[TimeFormats[self.Source]['Timestamp']].values.tolist()
-        # Dates = [Dates[date]/1e6 for date in range(0, len(Dates))]
+        Dates = [Dates[date]/1e3 for date in range(0, len(Dates))]
+        Dates = [Dates[date]/self.TimeUnit for date in range(0, len(Dates))]
 
         return np.array(Dates), np.array(Closes)
 

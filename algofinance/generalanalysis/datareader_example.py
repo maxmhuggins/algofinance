@@ -16,8 +16,8 @@ def main():
     start = '2021-03-02'
     end = '2021-03-05'
     dates = (start, end)
-    BTC = dr.DataReader('BTCUSDT', 'binance', dates, '1d')
-    TSLA = dr.DataReader('TSLA', 'yahoo', dates, '1d')
+    BTC = dr.DataReader('BTCUSDT', 'binance', dates, tick='1d', timeunit='3d')
+    TSLA = dr.DataReader('TSLA', 'yahoo', dates)
     print('BTC:', BTC.Dates, '\n', 'TSLA:', TSLA.Dates)
 
 

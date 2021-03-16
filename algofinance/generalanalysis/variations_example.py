@@ -17,7 +17,7 @@ def main():
     start = '2020-02-05'
     end = '2021-03-05'
     dates = (start, end)
-    BTC = dr.DataReader('BTCUSDT', 'binance', dates, '1d')
+    BTC = dr.DataReader('BTCUSDT', 'binance', dates, tick='1d', timeunit='1d')
     BTCVariations = vr.Variations(BTC.Dates, BTC.Closes, normalized=True)
 
     plt.bar(BTCVariations.Dates, BTCVariations.Variations)

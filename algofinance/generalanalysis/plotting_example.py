@@ -14,10 +14,10 @@ import matplotlib.pyplot as plt
 import time
 import numpy as np
 
-start = '2021-03-02'
+start = '2020-01-02'
 end = '2021-03-05'
 dates = (start, end)
-BTC = dr.DataReader('BTCUSDT', 'binance', dates, '1m')
+BTC = dr.DataReader('BTCUSDT', 'binance', dates, '1d')
 
 
 PandemicStartTime = (time.mktime(time.strptime('01/21/2020', '%m/%d/%Y')))
@@ -30,9 +30,9 @@ fig = plt.figure(1, figsize=(12, 6))
 plt.plot(BTC.Dates, BTC.Closes, color='black', label='BTCUSDT', linewidth=.2)
 plt.plot(PanX, PanY, label='First COVID-19 Case in US', alpha=.5,
          linestyle=':', color='magenta')
-plt.xlabel('Time (ms)')
+plt.xlabel('Time (days)')
 plt.ylabel('Closing Prices')
-plt.xlim(BTC.Closes[0], BTC.Dates[-1])
+plt.xlim(BTC.Dates[0], BTC.Dates[-1])
 plt.ylim(.9*min(BTC.Closes), 1.1*max(BTC.Closes))
 plt.title('Closing Prices for BTCUSDT From {} to {}'.format(start, end))
 plt.legend(loc='best')
