@@ -71,7 +71,6 @@ class DataReader:
         Closes = data[TimeFormats[self.Source]['Close']].values.tolist()
         Dates = data[TimeFormats[self.Source]['Timestamp']].values.tolist()
         Dates = [Dates[date]/1e9 for date in range(0, len(Dates))]
-        Dates = [Dates[date]/self.TimeUnit for date in range(0, len(Dates))]
 
         return np.array(Dates), np.array(Closes)
 
@@ -98,7 +97,6 @@ class DataReader:
         Closes = [float(Closes[close]) for close in range(0, len(Closes))]
         Dates = data[TimeFormats[self.Source]['Timestamp']].values.tolist()
         Dates = [Dates[date]/1e3 for date in range(0, len(Dates))]
-        Dates = [Dates[date]/self.TimeUnit for date in range(0, len(Dates))]
 
         return np.array(Dates), np.array(Closes)
 
