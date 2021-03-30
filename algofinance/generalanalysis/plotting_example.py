@@ -20,6 +20,7 @@ size = 20
 size_config = .8
 legendfont = 10
 thickness = 0.3
+width = .5
 resolution = 300
 color_value = '#6b8ba4'
 # ========================================================================== #
@@ -51,21 +52,26 @@ min_closes = [min(BTCVariations.ShiftedCloses),
               min(STORJVariations.ShiftedCloses),
               min(ETHVariations.ShiftedCloses)]
 
-PandemicStartTime = (time.mktime(time.strptime('01/21/2020', '%m/%d/%Y')))
+abs_max_closes = 0.9 * max([max(max_closes),
+                            abs(min(min_closes))])
 
-PanX = np.linspace(PandemicStartTime,
-                   PandemicStartTime)
+abs_max_variations = 1.1 * max([max(max_variations),
+                                abs(min(min_variations))])
+
+PandemicStartTime = (time.mktime(time.strptime('2020-01-21', '%Y-%m-%d')))
+
+PanX = np.linspace(PandemicStartTime - BTC.Dates[0],
+                   PandemicStartTime - BTC.Dates[0])
 PanY = np.linspace(.9*min(min_closes),
                    1.1*max(max_closes))
-
 # ========================================================================== #
 fig = plt.figure(1, figsize=(12, 6))
 
-plt.plot(BTCVariations.ShiftedDates, BTCVariations.ShiftedCloses, color='black',
-         label='BTCUSDT', linewidth=.2)
+plt.plot(BTCVariations.ShiftedDates, BTCVariations.ShiftedCloses,
+         color=color_value, label='BTCUSDT', linewidth=width)
 
 plt.plot(PanX, PanY, label='First COVID-19 Case in US', alpha=.5,
-         linestyle=':', color='magenta')
+         linestyle=':', color='black')
 
 plt.xlabel('Time (seconds since epoch)')
 plt.ylabel('Closing Prices')
@@ -80,8 +86,8 @@ plt.savefig('./figures/BTCExamplePlot.png', dpi=resolution)
 # ========================================================================== #
 fig = plt.figure(2, figsize=(12, 6))
 
-plt.plot(STORJVariations.ShiftedDates, STORJVariations.ShiftedCloses, color='black',
-         label='STORJUSDT', linewidth=.2)
+plt.plot(STORJVariations.ShiftedDates, STORJVariations.ShiftedCloses,
+         color=color_value, label='STORJUSDT', linewidth=width)
 
 plt.plot(PanX, PanY, label='First COVID-19 Case in US', alpha=.5,
          linestyle=':', color='magenta')
@@ -99,8 +105,8 @@ plt.savefig('./figures/STORJExamplePlot.png', dpi=resolution)
 # ========================================================================== #
 fig = plt.figure(3, figsize=(12, 6))
 
-plt.plot(ETHVariations.ShiftedDates, ETHVariations.ShiftedCloses, color='black',
-         label='ETHUSDT', linewidth=.2)
+plt.plot(ETHVariations.ShiftedDates, ETHVariations.ShiftedCloses,
+         color=color_value, label='ETHUSDT', linewidth=width)
 
 plt.plot(PanX, PanY, label='First COVID-19 Case in US', alpha=.5,
          linestyle=':', color='magenta')
@@ -126,7 +132,7 @@ plt.plot(BTCVariations.Dates, BTCVariations.Variations, label='BTCUSDT',
          color='black', lw=thickness)
 
 plt.xlim(BTCVariations.Dates[0], BTCVariations.Dates[-1])
-plt.ylim(.9*min(min_variations), 1.1*max(max_variations))
+plt.ylim(-abs_max_variations, abs_max_variations)
 plt.legend(loc='best', fontsize=legendfont)
 # ========================================================================== #
 plt.subplot(132)
@@ -137,7 +143,7 @@ plt.plot(STORJVariations.Dates, STORJVariations.Variations, label='STORJUSDT',
          color='b', lw=thickness)
 
 plt.xlim(STORJVariations.Dates[0], STORJVariations.Dates[-1])
-plt.ylim(.9*min(min_variations), 1.1*max(max_variations))
+plt.ylim(-abs_max_variations, abs_max_variations)
 plt.legend(loc='best', fontsize=legendfont)
 # ========================================================================== #
 plt.subplot(133)
@@ -148,7 +154,7 @@ plt.plot(ETHVariations.Dates, ETHVariations.Variations, label='ETHUSDT',
          color='m', lw=thickness)
 
 plt.xlim(ETHVariations.Dates[0], ETHVariations.Dates[-1])
-plt.ylim(.9*min(min_variations), 1.1*max(max_variations))
+plt.ylim(-abs_max_variations, abs_max_variations)
 plt.legend(loc='best', fontsize=legendfont)
 plt.savefig('./figures/VariationsExamplePlot.png', dpi=resolution)
 # ========================================================================== #
