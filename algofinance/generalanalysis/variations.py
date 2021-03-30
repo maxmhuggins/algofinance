@@ -22,6 +22,8 @@ class Variations:
         self.Dates = dates
         self.Closes = closes
         self.Normalized = normalized
+
+        self.NormalizedCloses = self.normalizer()
         self.ShiftedDates, self.ShiftedCloses = self.shifter()
 
         self.Dates, self.Variations = self.main()
@@ -44,10 +46,25 @@ class Variations:
         shifted_dates, shifted_closes = [], []
 
         for i in range(0, len(self.Dates)):
-            shifted_closes.append(self.Closes[i]-self.Closes[0])
-            shifted_dates.append(self.Dates[i]-self.Dates[0])
+            shifted_closes.append(
+                self.NormalizedCloses[i]-self.NormalizedCloses[0])
+
+            shifted_dates.append(
+                self.Dates[i]-self.Dates[0])
 
         return shifted_dates, shifted_closes
+
+    def normalizer(self):
+        normalized_closes = []
+
+        for i in range(0, len(self.Closes)):
+            if i == 0:
+                normalized_closes.append(0)
+            else:
+                normalized_close = self.Closes[i]/self.Closes[0]
+                normalized_closes.append(normalized_close)
+
+        return normalized_closes
 
     def normalized_variations(self):
         dates, closes = self.Dates, self.Closes

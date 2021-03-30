@@ -14,90 +14,141 @@ import variations as vr
 import matplotlib.pyplot as plt
 import time
 import numpy as np
-
+# ========================================================================== #
 plt.style.use('classic')
 size = 20
 size_config = .8
 legendfont = 10
-thickness = 1.5
+thickness = 0.3
+resolution = 300
 color_value = '#6b8ba4'
-
-start = '2021-03-02'
-end = '2021-03-05'
+# ========================================================================== #
+start = '2020-01-01'
+end = '2021-03-30'
 dates = (start, end)
-BTC = dr.DataReader('BTCUSDT', 'binance', dates, '1m')
+BTC = dr.DataReader('BTCUSDT', 'binance', dates, '1d')
 BTCVariations = vr.Variations(BTC.Dates, BTC.Closes, normalized=True)
 
-STORJ = dr.DataReader('STORJUSDT', 'binance', dates, '1m')
+STORJ = dr.DataReader('STORJUSDT', 'binance', dates, '1d')
 STORJVariations = vr.Variations(STORJ.Dates, STORJ.Closes, normalized=True)
 
-ETH = dr.DataReader('ETHUSDT', 'binance', dates, '1m')
+ETH = dr.DataReader('ETHUSDT', 'binance', dates, '1d')
 ETHVariations = vr.Variations(ETH.Dates, ETH.Closes, normalized=True)
+# ========================================================================== #
+max_variations = [max(BTCVariations.Variations),
+                  max(ETHVariations.Variations),
+                  max(STORJVariations.Variations)]
 
+min_variations = [min(BTCVariations.Variations),
+                  min(ETHVariations.Variations),
+                  min(STORJVariations.Variations)]
+
+max_closes = [max(BTCVariations.ShiftedCloses),
+              max(STORJVariations.ShiftedCloses),
+              max(ETHVariations.ShiftedCloses)]
+
+min_closes = [min(BTCVariations.ShiftedCloses),
+              min(STORJVariations.ShiftedCloses),
+              min(ETHVariations.ShiftedCloses)]
 
 PandemicStartTime = (time.mktime(time.strptime('01/21/2020', '%m/%d/%Y')))
 
-PanX = np.linspace(PandemicStartTime, PandemicStartTime)
-PanY = np.linspace(.9*min(BTC.Closes), 1.1*max(BTC.Closes))
+PanX = np.linspace(PandemicStartTime,
+                   PandemicStartTime)
+PanY = np.linspace(.9*min(min_closes),
+                   1.1*max(max_closes))
 
-
+# ========================================================================== #
 fig = plt.figure(1, figsize=(12, 6))
-plt.plot(BTC.Dates, BTC.Closes, color='black', label='BTCUSDT', linewidth=.2)
+
+plt.plot(BTCVariations.ShiftedDates, BTCVariations.ShiftedCloses, color='black',
+         label='BTCUSDT', linewidth=.2)
+
 plt.plot(PanX, PanY, label='First COVID-19 Case in US', alpha=.5,
          linestyle=':', color='magenta')
+
 plt.xlabel('Time (seconds since epoch)')
 plt.ylabel('Closing Prices')
-plt.xlim(BTC.Dates[0], BTC.Dates[-1])
-plt.ylim(.9*min(BTC.Closes), 1.1*max(BTC.Closes))
+plt.xlim(BTCVariations.ShiftedDates[0], BTCVariations.ShiftedDates[-1])
+
+plt.ylim(.9*min(BTCVariations.ShiftedCloses),
+         1.1*max(BTCVariations.ShiftedCloses))
+
 plt.title('Closing Prices for BTCUSDT From {} to {}'.format(start, end))
 plt.legend(loc='best')
-plt.savefig('./figures/BTCExamplePlot.png', dpi=600)
-
+plt.savefig('./figures/BTCExamplePlot.png', dpi=resolution)
+# ========================================================================== #
 fig = plt.figure(2, figsize=(12, 6))
-plt.plot(STORJ.Dates, STORJ.Closes, color='black', label='STORJUSDT', linewidth=.2)
+
+plt.plot(STORJVariations.ShiftedDates, STORJVariations.ShiftedCloses, color='black',
+         label='STORJUSDT', linewidth=.2)
+
 plt.plot(PanX, PanY, label='First COVID-19 Case in US', alpha=.5,
          linestyle=':', color='magenta')
+
 plt.xlabel('Time (seconds since epoch)')
 plt.ylabel('Closing Prices')
-plt.xlim(STORJ.Dates[0], STORJ.Dates[-1])
-plt.ylim(.9*min(STORJ.Closes), 1.1*max(STORJ.Closes))
+plt.xlim(STORJVariations.ShiftedDates[0], STORJVariations.ShiftedDates[-1])
+
+plt.ylim(.9*min(STORJVariations.ShiftedCloses),
+         1.1*max(STORJVariations.ShiftedCloses))
+
 plt.title('Closing Prices for STORJUSDT From {} to {}'.format(start, end))
 plt.legend(loc='best')
-plt.savefig('./figures/STORJExamplePlot.png', dpi=600)
-
+plt.savefig('./figures/STORJExamplePlot.png', dpi=resolution)
+# ========================================================================== #
 fig = plt.figure(3, figsize=(12, 6))
-plt.plot(ETH.Dates, ETH.Closes, color='black', label='ETHUSDT', linewidth=.2)
+
+plt.plot(ETHVariations.ShiftedDates, ETHVariations.ShiftedCloses, color='black',
+         label='ETHUSDT', linewidth=.2)
+
 plt.plot(PanX, PanY, label='First COVID-19 Case in US', alpha=.5,
          linestyle=':', color='magenta')
+
 plt.xlabel('Time (seconds since epoch)')
 plt.ylabel('Closing Prices')
-plt.xlim(ETH.Dates[0], ETH.Dates[-1])
-plt.ylim(.9*min(ETH.Closes), 1.1*max(ETH.Closes))
+plt.xlim(ETHVariations.ShiftedDates[0], ETHVariations.ShiftedDates[-1])
+
+plt.ylim(.9*min(ETHVariations.ShiftedCloses),
+         1.1*max(ETHVariations.ShiftedCloses))
+
 plt.title('Closing Prices for ETHUSDT From {} to {}'.format(start, end))
 plt.legend(loc='best')
-plt.savefig('./figures/ETHExamplePlot.png', dpi=600)
-
+plt.savefig('./figures/ETHExamplePlot.png', dpi=resolution)
+# ========================================================================== #
 fig = plt.figure(4, figsize=(24, 6))
 fig.suptitle('Variations', fontsize=size)
 plt.subplot(131)
 plt.ylabel('Normalized Variation', fontsize=size_config*size)
 plt.xlabel('Time')
-plt.bar(BTCVariations.Dates, BTCVariations.Variations, label='BTCUSDT')
+
+plt.plot(BTCVariations.Dates, BTCVariations.Variations, label='BTCUSDT',
+         color='black', lw=thickness)
+
 plt.xlim(BTCVariations.Dates[0], BTCVariations.Dates[-1])
+plt.ylim(.9*min(min_variations), 1.1*max(max_variations))
 plt.legend(loc='best', fontsize=legendfont)
-#=================================================#
+# ========================================================================== #
 plt.subplot(132)
 plt.ylabel('Normalized Variation', fontsize=size_config*size)
 plt.xlabel('Time')
-plt.bar(STORJVariations.Dates, STORJVariations.Variations, label='STORJUSDT', color='b')
+
+plt.plot(STORJVariations.Dates, STORJVariations.Variations, label='STORJUSDT',
+         color='b', lw=thickness)
+
 plt.xlim(STORJVariations.Dates[0], STORJVariations.Dates[-1])
+plt.ylim(.9*min(min_variations), 1.1*max(max_variations))
 plt.legend(loc='best', fontsize=legendfont)
-#=================================================#
+# ========================================================================== #
 plt.subplot(133)
 plt.ylabel('Normalized Variation', fontsize=size_config*size)
 plt.xlabel('Time')
-plt.bar(ETHVariations.Dates, ETHVariations.Variations, label='ETHUSDT', color='m')
+
+plt.plot(ETHVariations.Dates, ETHVariations.Variations, label='ETHUSDT',
+         color='m', lw=thickness)
+
 plt.xlim(ETHVariations.Dates[0], ETHVariations.Dates[-1])
+plt.ylim(.9*min(min_variations), 1.1*max(max_variations))
 plt.legend(loc='best', fontsize=legendfont)
-#=================================================#
-plt.savefig('./figures/VariationsExamplePlot.png', dpi=600)
+plt.savefig('./figures/VariationsExamplePlot.png', dpi=resolution)
+# ========================================================================== #
