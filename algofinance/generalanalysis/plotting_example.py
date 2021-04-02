@@ -25,7 +25,7 @@ resolution = 300
 color_value = '#6b8ba4'
 # ========================================================================== #
 start = '2020-01-01'
-end = '2021-03-30'
+end = '2021-04-02'
 dates = (start, end)
 BTC = dr.DataReader('BTCUSDT', 'binance', dates, '1d')
 BTCVariations = vr.Variations(BTC.Dates, BTC.Closes, normalized=True)
@@ -158,3 +158,7 @@ plt.ylim(-abs_max_variations, abs_max_variations)
 plt.legend(loc='best', fontsize=legendfont)
 plt.savefig('./figures/VariationsExamplePlot.png', dpi=resolution)
 # ========================================================================== #
+print('Negative Variations for STORJ: %.2f' % STORJVariations.NegativeVariations)
+print('Positive Variations for STORJ: %.2f' % STORJVariations.PositiveVariations)
+print('Total Variations for STORJ: %.2f' % STORJVariations.TotalVariations)
+

@@ -27,6 +27,8 @@ class Variations:
         self.ShiftedDates, self.ShiftedCloses = self.shifter()
 
         self.Dates, self.Variations = self.main()
+        (self.NegativeVariations, self.PositiveVariations,
+         self.TotalVariations) = self.psuedo_volatility()
 
     def absolute_variations(self):
         variations = []
@@ -75,11 +77,30 @@ class Variations:
             if i == len(dates)-1:
                 normal_variations.append(np.nan)
             else:
-                variation = (closes[i] - closes[i+1])\
+                variation = (closes[i+1] - closes[i])\
                     / closes[i]
                 normal_variations.append(variation)
 
         return dates, normal_variations
+
+    def psuedo_volatility(self):
+        variations = self.Variations
+
+        negative_summer = 0
+        positive_summer = 0
+
+        for i in range(0,len(variations)):
+            if variations[i] < 0:
+                negative_variation = variations[i]
+                negative_summer += negative_variation
+
+            if variations[i] > 0:
+                positive_variation = variations[i]
+                positive_summer += positive_variation
+
+        total_variations = abs(negative_summer) + positive_summer
+        
+        return negative_summer, positive_summer, total_variations
 
     def main(self):
 
