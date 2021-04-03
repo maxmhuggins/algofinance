@@ -12,16 +12,16 @@ dates, run the strategy and then output a set of buys and sells
 """
 
 import backtester as bt
+import datareader as dr
 
 
-class ExampleStrategy:
+class ExampleStrategy(bt.BackTester):
 
     def __init__(self, closes, dates):
+        super().__init__(self)
         self.Closes = closes
         self.Dates = dates
-        
-        self.Buys, self.Sells = [], []
-        
+
     def moving_average(self, start, end):
         timespan = range(start, end)
         summer = 0
@@ -32,11 +32,27 @@ class ExampleStrategy:
         
         return average
     
-    def Buy(self, close):
-        self.Buys.append(close)
-
     def strategy(self):
         for i in range(0, len(self.Closes)):
             average = self.moving_average(0, i)
-            if self.Closes[i] < average:
-                self.Buy(close)
+            close = self.Closes[i]
+
+            if self.Position is None:
+                if close < average:
+                    self.buy(close)
+                else:
+                    pass
+            
+            elif self.Position is not None:
+                if close > average:
+                    self.sell(close)
+
+if __name__ == '__main__':
+    start = '2020-03-02'
+    end = '2021-03-05'
+    dates = (start, end)
+    BTC = dr.DataReader('BTCUSDT', 'binance', dates, tick='1d', timeunit='1d')
+    Strat = ExampleStrategy(BTC.Closes, BTC.Dates)
+    Strat.main()
+    print(Strat.Buys, Strat.Sells)
+                

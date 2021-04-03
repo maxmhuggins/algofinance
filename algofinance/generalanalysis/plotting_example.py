@@ -24,16 +24,16 @@ width = .5
 resolution = 300
 color_value = '#6b8ba4'
 # ========================================================================== #
-start = '2021-04-02'
+start = '2020-04-03'
 end = '2021-04-03'
 dates = (start, end)
-BTC = dr.DataReader('BTCUSDT', 'binance', dates, '1m')
+BTC = dr.DataReader('BTCUSDT', 'binance', dates, '1d')
 BTCVariations = vr.Variations(BTC.Dates, BTC.Closes, normalized=True)
 
-STORJ = dr.DataReader('STORJUSDT', 'binance', dates, '1m')
+STORJ = dr.DataReader('STORJUSDT', 'binance', dates, '1d')
 STORJVariations = vr.Variations(STORJ.Dates, STORJ.Closes, normalized=True)
 
-ETH = dr.DataReader('ETHUSDT', 'binance', dates, '1m')
+ETH = dr.DataReader('ETHUSDT', 'binance', dates, '1d')
 ETHVariations = vr.Variations(ETH.Dates, ETH.Closes, normalized=True)
 # ========================================================================== #
 max_variations = [max(BTCVariations.Variations),
