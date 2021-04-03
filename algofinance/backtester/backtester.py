@@ -20,6 +20,8 @@ class BackTester:
 
         self.Strategy = strategy
 
+        self.Total = self.broker()
+
     def buy(self, close):
         self.Buys.append(close)
         self.Position = True
@@ -29,16 +31,15 @@ class BackTester:
         self.Position = False
 
     def broker(self):
-        pass
+        buy_sum = 0
+        sell_sum = 0
+        for i in range(0, len(self.Buys)):
+            buy_sum += self.Buys[i]
+        for i in range(0, len(self.Sells)):
+            sell_sum += self.Sells[i]
+
+        return sell_sum - buy_sum
 
     def main(self):
-        self.Strategy(self.Closes, self.Dates)
-        
-
-        
-
-"""
-- BackTester should take in closes, dates, and a strategy. This will then be
-run by the script to determine profit gain/loss as well as provide analytics
-and visuals
-"""
+        self.Strategy()
+        return self.Buys, self.Sells
