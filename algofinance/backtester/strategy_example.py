@@ -17,11 +17,11 @@ class ExampleStrategy:
         self.Closes = closes
         self.Dates = dates
 
-        self.AccountValue = 10000000
+        self.StartingBalance = 10000000
 
         self.BackTester = bt.BackTester(self.Closes,
                                         self.Dates,
-                                        self.AccountValue,
+                                        self.StartingBalance,
                                         self.strategy)
 
     def moving_average(self, start, end):
@@ -60,5 +60,4 @@ if __name__ == '__main__':
     dates = (start, end)
     BTC = dr.DataReader('BTCUSDT', 'binance', dates, tick='1d', timeunit='1d')
     Strat = ExampleStrategy(BTC.Closes, BTC.Dates)
-    Buys, Sells = Strat.BackTester.main()
-    print(Buys, Sells)
+    Strat.BackTester.get_results()
