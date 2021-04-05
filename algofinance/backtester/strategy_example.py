@@ -17,6 +17,8 @@ class ExampleStrategy:
         self.Closes = closes
         self.Dates = dates
         self.Symbol = symbol
+        self.StrategyName = ('Under Average Buyer,'
+                             + 'Over Average Seller (Example)')
 
         self.StartingBalance = 10000000
 
@@ -24,7 +26,8 @@ class ExampleStrategy:
                                         self.Dates,
                                         self.StartingBalance,
                                         self.strategy,
-                                        self.Symbol)
+                                        self.Symbol,
+                                        self.StrategyName)
 
     def moving_average(self, start, end):
         timespan = range(start, end)
@@ -41,25 +44,26 @@ class ExampleStrategy:
 
     def strategy(self):
         backtester = self.BackTester
+        percent = .25
         for i in range(0, len(self.Closes)):
             average = self.moving_average(0, i)
             close = self.Closes[i]
 
-            if backtester.Position is None:
+            if backtester.NumberOfPositions <= 0:
                 if close < average:
-                    backtester.buy(close, i)
+                    backtester.buy(percent, i)
                 else:
                     pass
 
-            elif backtester.Position is not None:
+            elif backtester.NumberOfPositions > 0:
                 if close > average:
-                    backtester.sell(close, i)
+                    backtester.sell(1, i)
 
 
 if __name__ == '__main__':
     start = '2020-03-02'
     end = '2021-03-05'
-    symbol = 'BTCUSDT'
+    symbol = 'DOGEUSDT'
     dates = (start, end)
     BTC = dr.DataReader(symbol, 'binance', dates, tick='1d', timeunit='1d')
     Strat = ExampleStrategy(BTC.Closes, BTC.Dates, symbol)

@@ -12,31 +12,47 @@ plt.style.use('classic')
 
 class BackTester:
 
-    def __init__(self, closes, dates, starting_balance, strategy, symbol):
+    def __init__(self, closes, dates, starting_balance, strategy, symbol,
+                 strategy_name):
 
         self.Closes = closes
         self.Dates = dates
         self.StartingBalance = starting_balance
-        self.Position = None
+        self.AccountValue = starting_balance
+        self.NumberOfPositions = 0
         self.Symbol = symbol
+        self.StrategyName = strategy_name
         self.ColorValue = '#6b8ba4'
+        self.Resolution = 300
         self.Width = .5
 
         self.Buys, self.Sells, self.BuyIndex, self.SellIndex = [], [], [], []
 
         self.strategy = strategy
 
-    def buy(self, close, index):
-        self.Buys.append(close)
-        self.Position = True
-
+    def buy(self, percent, index):
+        self.Buys.append(self.Closes[index])
         self.BuyIndex.append(self.Dates[index])
 
-    def sell(self, close, index):
-        self.Sells.append(close)
-        self.Position = None
+        self.NumberOfPositions = (self.NumberOfPositions # ** This needs work. The point is to get rid of this funky idea of a single position being held at a time
+                                  + (percent * self.AccountValue)
+                                  / self.Closes[index])
 
+        self.AccountValue = (self.AccountValue
+                             - (self.NumberOfPositions * self.Closes[index]))
+        print('buy', self.AccountValue)
+
+    def sell(self, percent, index):
+        self.Sells.append(self.Closes[index])
         self.SellIndex.append(self.Dates[index])
+
+        self.NumberOfPositions = (self.NumberOfPositions
+                                  - (percent * self.AccountValue)
+                                  / self.Closes[index])
+
+        self.AccountValue = (self.AccountValue
+                             + (self.NumberOfPositions * self.Closes[index]))
+        print('sell', self.AccountValue)
 
     def broker(self):
         buy_sum = 0
@@ -58,26 +74,24 @@ class BackTester:
         print('Your starting balance: %.0f' % self.StartingBalance)
         print('Your final balance: %.5f' % self.FinalBalance)
         print('Percent Gain: %.5f' % self.Gain)
+        self.make_plot()
 
-    def make_plot(self, path='./Figures'):
-        fig = plt.figure(1, figsize=(12, 6))
+    def make_plot(self, path='./Figures', plot_name='ExamplePlot.png'):
+        plt.figure(figsize=(12, 6))
 
         plt.plot(self.Dates, self.Closes, color=self.ColorValue,
                  label=self.Symbol, linewidth=self.Width)
 
-        plt.scatter(self.BuyIndex, self.Buys, label='blank', alpha=.5,
+        plt.scatter(self.BuyIndex, self.Buys, label='buys', alpha=.5,
                     color='red')
-        plt.scatter(self.SellIndex, self.Sells, label='blank', alpha=.5,
+        plt.scatter(self.SellIndex, self.Sells, label='sells', alpha=.5,
                     color='green')
 
         plt.xlabel('Time (s)')
         plt.ylabel('Prices')
-        # plt.xlim(STORJVariations.ShiftedDates[0], STORJVariations.ShiftedDates[-1])
+        plt.xlim(self.Dates[0], self.Dates[-1])
+        plt.ylim(.9*min(self.Closes), 1.1*max(self.Closes))
 
-        # plt.ylim(.9*min(STORJVariations.ShiftedCloses),
-        #          1.1*max(STORJVariations.ShiftedCloses))
-
-        # plt.title('Closing Prices for STORJUSDT From {} to {}'.format(start, end))
+        plt.title('{}'.format(self.StrategyName))
         plt.legend(loc='best')
-        # plt.savefig('./figures/STORJExamplePlot.png', dpi=resolution)
-        plt.show()
+        plt.savefig(path + plot_name, dpi=self.Resolution)
