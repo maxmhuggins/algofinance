@@ -22,17 +22,21 @@ class BackTester:
         self.ColorValue = '#6b8ba4'
         self.Width = .5
 
-        self.Buys, self.Sells = [], []
+        self.Buys, self.Sells, self.BuyIndex, self.SellIndex = [], [], [], []
 
         self.strategy = strategy
 
-    def buy(self, close):
+    def buy(self, close, index):
         self.Buys.append(close)
         self.Position = True
 
-    def sell(self, close):
+        self.BuyIndex.append(self.Dates[index])
+
+    def sell(self, close, index):
         self.Sells.append(close)
         self.Position = None
+
+        self.SellIndex.append(self.Dates[index])
 
     def broker(self):
         buy_sum = 0
@@ -40,7 +44,6 @@ class BackTester:
 
         for i in range(0, len(self.Buys)):
             buy_sum += self.Buys[i]
-            self.BuyIndex.append(self.) # NEED TO MAKE A BUY AND SELL INDEX FOR PLOTTING
         for i in range(0, len(self.Sells)):
             sell_sum += self.Sells[i]
 
@@ -61,18 +64,20 @@ class BackTester:
 
         plt.plot(self.Dates, self.Closes, color=self.ColorValue,
                  label=self.Symbol, linewidth=self.Width)
-        
-        plt.scatter(self.BuyIndex, self.Buys, label='First COVID-19 Case in US', alpha=.5,
-                 linestyle=':', color='magenta')
-        
+
+        plt.scatter(self.BuyIndex, self.Buys, label='blank', alpha=.5,
+                    color='red')
+        plt.scatter(self.SellIndex, self.Sells, label='blank', alpha=.5,
+                    color='green')
+
         plt.xlabel('Time (s)')
-        plt.ylabel('Closing Prices')
-        plt.xlim(STORJVariations.ShiftedDates[0], STORJVariations.ShiftedDates[-1])
-        
-        plt.ylim(.9*min(STORJVariations.ShiftedCloses),
-                 1.1*max(STORJVariations.ShiftedCloses))
-        
-        plt.title('Closing Prices for STORJUSDT From {} to {}'.format(start, end))
+        plt.ylabel('Prices')
+        # plt.xlim(STORJVariations.ShiftedDates[0], STORJVariations.ShiftedDates[-1])
+
+        # plt.ylim(.9*min(STORJVariations.ShiftedCloses),
+        #          1.1*max(STORJVariations.ShiftedCloses))
+
+        # plt.title('Closing Prices for STORJUSDT From {} to {}'.format(start, end))
         plt.legend(loc='best')
-        plt.savefig('./figures/STORJExamplePlot.png', dpi=resolution)
-                
+        # plt.savefig('./figures/STORJExamplePlot.png', dpi=resolution)
+        plt.show()

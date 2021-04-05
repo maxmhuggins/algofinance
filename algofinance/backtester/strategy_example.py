@@ -47,13 +47,13 @@ class ExampleStrategy:
 
             if backtester.Position is None:
                 if close < average:
-                    backtester.buy(close)
+                    backtester.buy(close, i)
                 else:
                     pass
 
             elif backtester.Position is not None:
                 if close > average:
-                    backtester.sell(close)
+                    backtester.sell(close, i)
 
 
 if __name__ == '__main__':
