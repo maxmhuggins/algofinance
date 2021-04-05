@@ -13,16 +13,18 @@ import datareader as dr
 
 class ExampleStrategy:
 
-    def __init__(self, closes, dates):
+    def __init__(self, closes, dates, symbol):
         self.Closes = closes
         self.Dates = dates
+        self.Symbol = symbol
 
         self.StartingBalance = 10000000
 
         self.BackTester = bt.BackTester(self.Closes,
                                         self.Dates,
                                         self.StartingBalance,
-                                        self.strategy)
+                                        self.strategy,
+                                        self.Symbol)
 
     def moving_average(self, start, end):
         timespan = range(start, end)
@@ -57,7 +59,8 @@ class ExampleStrategy:
 if __name__ == '__main__':
     start = '2020-03-02'
     end = '2021-03-05'
+    symbol = 'BTCUSDT'
     dates = (start, end)
-    BTC = dr.DataReader('BTCUSDT', 'binance', dates, tick='1d', timeunit='1d')
-    Strat = ExampleStrategy(BTC.Closes, BTC.Dates)
+    BTC = dr.DataReader(symbol, 'binance', dates, tick='1d', timeunit='1d')
+    Strat = ExampleStrategy(BTC.Closes, BTC.Dates, symbol)
     Strat.BackTester.get_results()
