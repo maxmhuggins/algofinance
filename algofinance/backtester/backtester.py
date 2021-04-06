@@ -57,29 +57,30 @@ class BackTester:
 
         # print('sell', self.NumberOfPositions)
 
-    def broker(self):
-        buy_sum = 0
-        sell_sum = 0
+    # def broker(self):
+    #     buy_sum = 0
+    #     sell_sum = 0
 
-        for i in range(0, len(self.Buys)):
-            buy_sum += self.Buys[i]
-        for i in range(0, len(self.Sells)):
-            sell_sum += self.Sells[i]
+    #     for i in range(0, len(self.Buys)):
+    #         buy_sum += self.Buys[i]
+    #     for i in range(0, len(self.Sells)):
+    #         sell_sum += self.Sells[i]
 
-        final_balance = self.StartingBalance - (sell_sum - buy_sum)
-        gain = ((final_balance / self.StartingBalance) * 100) - 100
+    #     final_balance = self.StartingBalance - (sell_sum - buy_sum)
+    #     gain = ((final_balance / self.StartingBalance) * 100) - 100
 
-        return final_balance, gain
+    #     return final_balance, gain
 
     def get_results(self):
         self.strategy()
-        self.FinalBalance, self.Gain = self.broker()
+        self.FinalBalance = self.AccountValue
+        self.Gain = (100 * self.AccountValue / self.StartingBalance) - 100
         print('Your starting balance: %.0f' % self.StartingBalance)
         print('Your final balance: %.5f' % self.AccountValue)
         print('Percent Gain: %.5f' % self.Gain)
         self.make_plot()
 
-    def make_plot(self, path='./Figures', plot_name='ExamplePlot.png'):
+    def make_plot(self, path='./figures', plot_name='ExamplePlot.png'):
         plt.figure(figsize=(12, 6))
 
         plt.plot(self.Dates, self.Closes, color=self.ColorValue,
