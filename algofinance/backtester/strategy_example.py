@@ -33,7 +33,7 @@ class ExampleStrategy:
         timespan = range(start, end)
         summer = 0
 
-        if len(timespan) == 0:
+        if any(element < 0 for element in timespan):
             average = 0
         else:
             for i in timespan:
@@ -46,7 +46,7 @@ class ExampleStrategy:
         backtester = self.BackTester
         percent = .25
         for i in range(0, len(self.Closes)):
-            average = self.moving_average(0, i)
+            average = self.moving_average(i-10, i)
             close = self.Closes[i]
 
             if backtester.NumberOfPositions <= 0:

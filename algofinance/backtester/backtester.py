@@ -20,6 +20,8 @@ class BackTester:
         self.StartingBalance = starting_balance
         self.AccountValue = starting_balance
         self.NumberOfPositions = 0
+        self.Commission = 1 - .01
+
         self.Symbol = symbol
         self.StrategyName = strategy_name
         self.ColorValue = '#6b8ba4'
@@ -34,25 +36,26 @@ class BackTester:
         self.Buys.append(self.Closes[index])
         self.BuyIndex.append(self.Dates[index])
 
-        self.NumberOfPositions = (self.NumberOfPositions # ** This needs work. The point is to get rid of this funky idea of a single position being held at a time
+        self.NumberOfPositions = (self.NumberOfPositions
                                   + (percent * self.AccountValue)
                                   / self.Closes[index])
 
-        self.AccountValue = (self.AccountValue
-                             - (self.NumberOfPositions * self.Closes[index]))
-        print('buy', self.AccountValue)
+        self.AccountValue = self.Commission * (self.AccountValue
+                                               - (self.NumberOfPositions
+                                                  * self.Closes[index]))
+        # print('buy', self.NumberOfPositions)
 
     def sell(self, percent, index):
         self.Sells.append(self.Closes[index])
         self.SellIndex.append(self.Dates[index])
 
-        self.NumberOfPositions = (self.NumberOfPositions
-                                  - (percent * self.AccountValue)
-                                  / self.Closes[index])
+        self.AccountValue = self.Commission * (self.AccountValue
+                                               + (self.NumberOfPositions
+                                                  * self.Closes[index]))
 
-        self.AccountValue = (self.AccountValue
-                             + (self.NumberOfPositions * self.Closes[index]))
-        print('sell', self.AccountValue)
+        self.NumberOfPositions = 0
+
+        # print('sell', self.NumberOfPositions)
 
     def broker(self):
         buy_sum = 0
@@ -72,7 +75,7 @@ class BackTester:
         self.strategy()
         self.FinalBalance, self.Gain = self.broker()
         print('Your starting balance: %.0f' % self.StartingBalance)
-        print('Your final balance: %.5f' % self.FinalBalance)
+        print('Your final balance: %.5f' % self.AccountValue)
         print('Percent Gain: %.5f' % self.Gain)
         self.make_plot()
 
