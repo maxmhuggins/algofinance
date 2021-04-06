@@ -43,7 +43,6 @@ class BackTester:
         self.AccountValue = self.Commission * (self.AccountValue
                                                - (self.NumberOfPositions
                                                   * self.Closes[index]))
-        # print('buy', self.NumberOfPositions)
 
     def sell(self, percent, index):
         self.Sells.append(self.Closes[index])
@@ -55,21 +54,21 @@ class BackTester:
 
         self.NumberOfPositions = 0
 
-        # print('sell', self.NumberOfPositions)
+    def lines(self):
+        """ I want to implement a function that looks at differences between a
+        buy and a sell order and determines if it was profitable, then plot
+        some kind of indicator to visualize the gain/loss"""
+        for i in range(0, self.Buys):
+            pass
 
-    # def broker(self):
-    #     buy_sum = 0
-    #     sell_sum = 0
+    def broker(self):
+        """ I don't need the broker method right now, but I believe I will in
+        the future so it is just a placeholder right now"""
+        pass
 
-    #     for i in range(0, len(self.Buys)):
-    #         buy_sum += self.Buys[i]
-    #     for i in range(0, len(self.Sells)):
-    #         sell_sum += self.Sells[i]
-
-    #     final_balance = self.StartingBalance - (sell_sum - buy_sum)
-    #     gain = ((final_balance / self.StartingBalance) * 100) - 100
-
-    #     return final_balance, gain
+    def optimizer(self):
+        """I want to implement tensor flow to optimize strategies"""
+        pass
 
     def get_results(self):
         self.strategy()
