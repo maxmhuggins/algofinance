@@ -66,9 +66,13 @@ class BackTester:
         the future so it is just a placeholder right now"""
         pass
 
-    def optimizer(self):
-        """I want to implement tensor flow to optimize strategies"""
-        pass
+    def optimizer(self, parameters, ranges):
+        """I want to implement tensor flow to optimize strategies but for now
+        I'm going to settle with some dinky brute force methods"""
+        # for i in range(0,len(parameters)):
+        #     parameter = parameter[i]
+
+        #     for l in range(0, len(self.Closes)):
 
     def get_results(self):
         self.strategy()
@@ -77,11 +81,13 @@ class BackTester:
         print('Your starting balance: %.0f' % self.StartingBalance)
         print('Your final balance: %.5f' % self.AccountValue)
         print('Percent Gain: %.5f' % self.Gain)
-        self.make_plot()
 
-    def make_plot(self, path='./figures', plot_name='ExamplePlot.png'):
+    def make_plot(self, indicator, path='./figures',
+                  plot_name='ExamplePlot.png'):
+
         plt.figure(figsize=(12, 6))
-
+        for i in range(0, len(indicator)):
+            indicator[i]()
         plt.plot(self.Dates, self.Closes, color=self.ColorValue,
                  label=self.Symbol, linewidth=self.Width)
 
