@@ -28,38 +28,60 @@ class BackTester:
         self.Resolution = 300
         self.Width = .5
 
-        self.Buys, self.Sells, self.BuyIndex, self.SellIndex = [], [], [], []
+        (self.Buys, self.Sells, self.BuyIndex, self.SellIndex,
+         self.PositionValuesAtBuy, self.PositionValuesAtSell) = ([], [], [],
+                                                                 [], [], [])
 
         self.strategy = strategy
 
     def buy(self, percent, index):
-        self.Buys.append(self.Closes[index])
-        self.BuyIndex.append(self.Dates[index])
+        close = self.Closes[index]
+        date = self.Dates[index]
+        self.Buys.append(close)
+        self.BuyIndex.append(date)
 
         self.NumberOfPositions = (self.NumberOfPositions
                                   + (percent * self.AccountValue)
-                                  / self.Closes[index])
+                                  / close)
+
+        position_value = self.NumberOfPositions * close
+        self.PositionValuesAtBuy.append(position_value)
 
         self.AccountValue = self.Commission * (self.AccountValue
                                                - (self.NumberOfPositions
-                                                  * self.Closes[index]))
+                                                  * close))
 
-    def sell(self, percent, index):
-        self.Sells.append(self.Closes[index])
-        self.SellIndex.append(self.Dates[index])
+    def sell(self, index):
+        close = self.Closes[index]
+        date = self.Dates[index]
+        self.Sells.append(close)
+        self.SellIndex.append(date)
 
         self.AccountValue = self.Commission * (self.AccountValue
                                                + (self.NumberOfPositions
-                                                  * self.Closes[index]))
+                                                  * close))
 
+        position_value = self.NumberOfPositions * close
+        self.PositionValuesAtSell.append(position_value)
         self.NumberOfPositions = 0
 
     def lines(self):
         """ I want to implement a function that looks at differences between a
         buy and a sell order and determines if it was profitable, then plot
         some kind of indicator to visualize the gain/loss"""
-        for i in range(0, self.Buys):
-            pass
+        for i in range(0, len(self.PositionValuesAtSell)):
+            sell_value = self.PositionValuesAtSell[i]
+            buy_value = self.PositionValuesAtBuy[i]
+            difference = sell_value - buy_value
+
+            dates = [self.BuyIndex[i], self.SellIndex[i]]
+            closes = [self.Buys[i], self.Sells[i]]
+            if difference > 0:
+                plt.plot(dates, closes, color='green', linewidth=.5, alpha=.5)
+            elif difference == 0:
+                plt.plot(dates, closes, color='black', linewidth=.5, alpha=.5)
+            elif difference < 0:
+                plt.plot(dates, closes, color='red', linewidth=.5, alpha=.5)
 
     def broker(self):
         """ I don't need the broker method right now, but I believe I will in
@@ -76,13 +98,15 @@ class BackTester:
 
     def get_results(self):
         self.strategy()
+        if self.NumberOfPositions > 0:
+            self.sell(len(self.Closes)-1)
         self.FinalBalance = self.AccountValue
         self.Gain = (100 * self.AccountValue / self.StartingBalance) - 100
         print('Your starting balance: %.0f' % self.StartingBalance)
         print('Your final balance: %.5f' % self.AccountValue)
         print('Percent Gain: %.5f' % self.Gain)
 
-    def make_plot(self, indicator, path='./figures',
+    def make_plot(self, indicator, path='./figures/',
                   plot_name='ExamplePlot.png'):
 
         plt.figure(figsize=(12, 6))
@@ -95,7 +119,7 @@ class BackTester:
                     color='red')
         plt.scatter(self.SellIndex, self.Sells, label='sells', alpha=.5,
                     color='green')
-
+        self.lines()
         plt.xlabel('Time (s)')
         plt.ylabel('Prices')
         plt.xlim(self.Dates[0], self.Dates[-1])

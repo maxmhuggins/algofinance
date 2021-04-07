@@ -61,7 +61,7 @@ class ExampleStrategy:
 
             elif backtester.NumberOfPositions > 0:
                 if close > average:
-                    backtester.sell(1, i)
+                    backtester.sell(i)
 
     def indicator(self):
         backtester = self.BackTester
@@ -73,7 +73,7 @@ class ExampleStrategy:
 if __name__ == '__main__':
     start = '2020-03-02'
     end = '2021-03-05'
-    symbol = 'DOGEUSDT'
+    symbol = 'BTCUSDT'
     dates = (start, end)
     BTC = dr.DataReader(symbol, 'binance', dates, tick='1d', timeunit='1d')
     Strat = ExampleStrategy(BTC.Closes, BTC.Dates, symbol)
