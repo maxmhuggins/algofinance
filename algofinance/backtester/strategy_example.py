@@ -9,6 +9,7 @@ Created on Sat Apr  3 08:10:57 2021
 
 import backtester as bt
 import datareader as dr
+import matplotlib.pyplot as plt
 
 
 class ExampleStrategy:
@@ -17,11 +18,13 @@ class ExampleStrategy:
         self.Closes = closes
         self.Dates = dates
         self.Symbol = symbol
+
+        self.MovingAverageValues = []
+        self.N = 5
         self.StrategyName = ('Under Average Buyer,'
                              + 'Over Average Seller (Example)')
 
         self.StartingBalance = 10000000
-
         self.BackTester = bt.BackTester(self.Closes,
                                         self.Dates,
                                         self.StartingBalance,
@@ -46,7 +49,8 @@ class ExampleStrategy:
         backtester = self.BackTester
         percent = .25
         for i in range(0, len(self.Closes)):
-            average = self.moving_average(i-10, i)
+            average = self.moving_average(i-self.N, i)
+            self.MovingAverageValues.append(average)
             close = self.Closes[i]
 
             if backtester.NumberOfPositions <= 0:
@@ -59,6 +63,12 @@ class ExampleStrategy:
                 if close > average:
                     backtester.sell(1, i)
 
+    def indicator(self):
+        backtester = self.BackTester
+        plt.plot(backtester.Dates, self.MovingAverageValues,
+                 color='magenta', label='Moving Average',
+                 linewidth=backtester.Width)
+
 
 if __name__ == '__main__':
     start = '2020-03-02'
@@ -68,3 +78,5 @@ if __name__ == '__main__':
     BTC = dr.DataReader(symbol, 'binance', dates, tick='1d', timeunit='1d')
     Strat = ExampleStrategy(BTC.Closes, BTC.Dates, symbol)
     Strat.BackTester.get_results()
+    list_of_indicators = [Strat.indicator]
+    Strat.BackTester.make_plot(list_of_indicators)
