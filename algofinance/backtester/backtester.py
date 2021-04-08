@@ -18,6 +18,7 @@ class BackTester:
         self.Closes = closes
         self.Dates = dates
         self.StartingBalance = starting_balance
+        self.Strategy = strategy
         self.AccountValue = starting_balance
         self.Indicators = indicators
         self.NumberOfPositions = 0
@@ -32,8 +33,6 @@ class BackTester:
         (self.Buys, self.Sells, self.BuyIndex, self.SellIndex,
          self.PositionValuesAtBuy, self.PositionValuesAtSell) = ([], [], [],
                                                                  [], [], [])
-
-        self.strategy = strategy
 
     def buy(self, percent, index):
         close = self.Closes[index]
@@ -66,34 +65,34 @@ class BackTester:
         self.PositionValuesAtSell.append(position_value)
         self.NumberOfPositions = 0
 
-        self.runner()
-
     def lines(self):
         for i in range(0, len(self.PositionValuesAtSell)):
             sell_value = self.PositionValuesAtSell[i]
             buy_value = self.PositionValuesAtBuy[i]
             difference = sell_value - buy_value
+            width = 1.25
 
             dates = [self.BuyIndex[i], self.SellIndex[i]]
             closes = [self.Buys[i], self.Sells[i]]
             if difference > 0:
-                plt.plot(dates, closes, color='green', linewidth=1, alpha=1)
+                plt.plot(dates, closes, color='green', linewidth=width)
             elif difference == 0:
-                plt.plot(dates, closes, color='black', linewidth=1, alpha=1)
+                plt.plot(dates, closes, color='black', linewidth=width)
             elif difference < 0:
-                plt.plot(dates, closes, color='red', linewidth=1, alpha=1)
+                plt.plot(dates, closes, color='red', linewidth=width)
 
     def broker(self):
         """ I don't need the broker method right now, but I believe I will in
         the future so it is just a placeholder right now"""
         pass
 
-    def optimizer(self, parameter, guess):
+    def optimizer(self, parameter, optimize_range):
         """I want to implement tensor flow to optimize strategies but for now
         I'm going to settle with some dinky brute force methods"""
-        # for i in guess:
-
-        #     for l in range(0, len(self.Closes)):
+        for i in optimize_range:
+            parameter = i
+            for l in range(0, len(self.Closes)):
+                pass
 
     def make_plot(self, path='./figures/',
                   plot_name='ExamplePlot.png'):
@@ -130,13 +129,15 @@ class BackTester:
         print('Your starting balance: %.0f' % self.StartingBalance)
         print('Your final balance: %.5f' % self.AccountValue)
         print('Percent Gain: %.5f' % self.Gain)
+        self.make_plot()
 
-    def runner(self):
-        self.strategy()
+    def runner(self, optimizing_parameter=None):
+        self.Strategy(optimizing_parameter)
         if self.NumberOfPositions > 0:
             self.sell(len(self.Closes)-1)
         self.FinalBalance = self.AccountValue
         self.Gain = (100 * self.AccountValue / self.StartingBalance) - 100
 
-        self.get_results()
-        self.make_plot()
+        self.get_results(plot=True)
+
+        return self.Gain

@@ -43,14 +43,17 @@ class ExampleStrategy:
 
         return average
 
-    def strategy(self):
+    def strategy(self, optimizing_parameter=None):
+        if optimizing_parameter is None:
+            optimizing_parameter = self.HowSmooth
+
         backtester = self.BackTester
         percent = .25
         moving_averages = []
 
         for i in range(0, len(self.Closes)):
             close = self.Closes[i]
-            average = self.moving_average(i - self.HowSmooth, i)
+            average = self.moving_average(i - optimizing_parameter, i)
 
             moving_averages.append(average)
             positions = backtester.NumberOfPositions
@@ -82,4 +85,4 @@ if __name__ == '__main__':
     dates = (start, end)
     BTC = dr.DataReader(symbol, 'binance', dates, tick='1d', timeunit='1d')
     Strat = ExampleStrategy(BTC.Closes, BTC.Dates, symbol)
-    Strat.BackTester.get_results()
+    Strat.BackTester.runner(optimizing_parameter=Strat.HowSmooth)
