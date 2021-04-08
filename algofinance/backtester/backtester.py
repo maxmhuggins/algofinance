@@ -95,7 +95,7 @@ class BackTester:
 
     #     plt.scatter(optimize_range, self.Gains)
 
-    def make_plot(self, path='./figures/',
+    def make_plot(self, path='../figures/',
                   plot_name='ExamplePlot.png'):
 
         plt.figure(figsize=(12, 6))
