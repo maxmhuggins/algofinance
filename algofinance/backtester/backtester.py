@@ -13,7 +13,7 @@ plt.style.use('classic')
 class BackTester:
 
     def __init__(self, closes, dates, starting_balance, strategy, symbol,
-                 strategy_name, indicators):
+                 strategy_name, indicators=None, plot=True):
 
         self.Closes = closes
         self.Dates = dates
@@ -21,6 +21,7 @@ class BackTester:
         self.Strategy = strategy
         self.AccountValue = starting_balance
         self.Indicators = indicators
+        self.Plot = plot
         self.NumberOfPositions = 0
         self.Commission = 1 - .01
 
@@ -31,8 +32,8 @@ class BackTester:
         self.Width = .5
 
         (self.Buys, self.Sells, self.BuyIndex, self.SellIndex,
-         self.PositionValuesAtBuy, self.PositionValuesAtSell) = ([], [], [],
-                                                                 [], [], [])
+         self.PositionValuesAtBuy, self.PositionValuesAtSell,
+         self.Gains) = ([], [], [], [], [], [], [])
 
     def buy(self, percent, index):
         close = self.Closes[index]
@@ -86,13 +87,13 @@ class BackTester:
         the future so it is just a placeholder right now"""
         pass
 
-    def optimizer(self, parameter, optimize_range):
-        """I want to implement tensor flow to optimize strategies but for now
-        I'm going to settle with some dinky brute force methods"""
-        for i in optimize_range:
-            parameter = i
-            for l in range(0, len(self.Closes)):
-                pass
+    # def optimizer(self, optimizing_parameter, optimize_range):
+    #     """I want to implement tensor flow to optimize strategies but for now
+    #     I'm going to settle with some dinky brute force methods"""
+    #     for i in optimize_range:
+    #         self.Gains.append(self.runner(optimizing_parameter))
+
+    #     plt.scatter(optimize_range, self.Gains)
 
     def make_plot(self, path='./figures/',
                   plot_name='ExamplePlot.png'):
@@ -129,15 +130,16 @@ class BackTester:
         print('Your starting balance: %.0f' % self.StartingBalance)
         print('Your final balance: %.5f' % self.AccountValue)
         print('Percent Gain: %.5f' % self.Gain)
-        self.make_plot()
+        if self.Plot is False:
+            pass
+        else:
+            self.make_plot()
 
-    def runner(self, optimizing_parameter=None):
-        self.Strategy(optimizing_parameter)
+    def runner(self):
+        self.Strategy()
         if self.NumberOfPositions > 0:
             self.sell(len(self.Closes)-1)
         self.FinalBalance = self.AccountValue
         self.Gain = (100 * self.AccountValue / self.StartingBalance) - 100
-
-        self.get_results(plot=True)
-
-        return self.Gain
+        self.Gains.append(self.Gain)
+        self.get_results()

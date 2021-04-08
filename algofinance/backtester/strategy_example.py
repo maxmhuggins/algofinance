@@ -85,4 +85,12 @@ if __name__ == '__main__':
     dates = (start, end)
     BTC = dr.DataReader(symbol, 'binance', dates, tick='1d', timeunit='1d')
     Strat = ExampleStrategy(BTC.Closes, BTC.Dates, symbol)
-    Strat.BackTester.runner(optimizing_parameter=Strat.HowSmooth)
+    # Strat.BackTester.runner()
+    optimize_range = range(1, 10)
+    for i in optimize_range:
+        Strat.HowSmooth = i
+        Strat.BackTester.runner()
+
+    plt.scatter(optimize_range, Strat.BackTester.Gains, marker='x')
+    plt.plot(optimize_range, Strat.BackTester.Gains, lw=.5)
+    # Strat.BackTester.optimizer()
