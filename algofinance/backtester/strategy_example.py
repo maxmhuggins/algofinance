@@ -6,7 +6,6 @@ Created on Sat Apr  3 08:10:57 2021
 @author: maxmhuggins
 """
 
-
 import backtester as bt
 import datareader as dr
 import matplotlib.pyplot as plt
@@ -15,22 +14,21 @@ import matplotlib.pyplot as plt
 class ExampleStrategy:
 
     def __init__(self, closes, dates, symbol):
-        self.Closes = closes
-        self.Dates = dates
-        self.Symbol = symbol
 
-        self.MovingAverageValues = []
-        self.N = 5
+        self.Closes, self.Dates, self.Symbol = closes, dates, symbol
+
+        self.HowSmooth = 5
+        self.StartingBalance = 10000000
         self.StrategyName = ('Under Average Buyer,'
                              + 'Over Average Seller (Example)')
-
-        self.StartingBalance = 10000000
+        self.Indicators = [self.indicator]
         self.BackTester = bt.BackTester(self.Closes,
                                         self.Dates,
                                         self.StartingBalance,
                                         self.strategy,
                                         self.Symbol,
-                                        self.StrategyName)
+                                        self.StrategyName,
+                                        self.Indicators)
 
     def moving_average(self, start, end):
         timespan = range(start, end)
@@ -48,20 +46,27 @@ class ExampleStrategy:
     def strategy(self):
         backtester = self.BackTester
         percent = .25
-        for i in range(0, len(self.Closes)):
-            average = self.moving_average(i-self.N, i)
-            self.MovingAverageValues.append(average)
-            close = self.Closes[i]
+        moving_averages = []
 
-            if backtester.NumberOfPositions <= 0:
+        for i in range(0, len(self.Closes)):
+            close = self.Closes[i]
+            average = self.moving_average(i - self.HowSmooth, i)
+
+            moving_averages.append(average)
+            positions = backtester.NumberOfPositions
+
+            if positions == 0:
+
                 if close < average:
                     backtester.buy(percent, i)
                 else:
                     pass
 
-            elif backtester.NumberOfPositions > 0:
+            elif positions > 0:
                 if close > average:
                     backtester.sell(i)
+
+        self.MovingAverageValues = moving_averages
 
     def indicator(self):
         backtester = self.BackTester
@@ -78,5 +83,3 @@ if __name__ == '__main__':
     BTC = dr.DataReader(symbol, 'binance', dates, tick='1d', timeunit='1d')
     Strat = ExampleStrategy(BTC.Closes, BTC.Dates, symbol)
     Strat.BackTester.get_results()
-    list_of_indicators = [Strat.indicator]
-    Strat.BackTester.make_plot(list_of_indicators)

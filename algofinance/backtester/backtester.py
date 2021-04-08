@@ -13,12 +13,13 @@ plt.style.use('classic')
 class BackTester:
 
     def __init__(self, closes, dates, starting_balance, strategy, symbol,
-                 strategy_name):
+                 strategy_name, indicators):
 
         self.Closes = closes
         self.Dates = dates
         self.StartingBalance = starting_balance
         self.AccountValue = starting_balance
+        self.Indicators = indicators
         self.NumberOfPositions = 0
         self.Commission = 1 - .01
 
@@ -65,10 +66,9 @@ class BackTester:
         self.PositionValuesAtSell.append(position_value)
         self.NumberOfPositions = 0
 
+        self.runner()
+
     def lines(self):
-        """ I want to implement a function that looks at differences between a
-        buy and a sell order and determines if it was profitable, then plot
-        some kind of indicator to visualize the gain/loss"""
         for i in range(0, len(self.PositionValuesAtSell)):
             sell_value = self.PositionValuesAtSell[i]
             buy_value = self.PositionValuesAtBuy[i]
@@ -77,54 +77,66 @@ class BackTester:
             dates = [self.BuyIndex[i], self.SellIndex[i]]
             closes = [self.Buys[i], self.Sells[i]]
             if difference > 0:
-                plt.plot(dates, closes, color='green', linewidth=.5, alpha=.5)
+                plt.plot(dates, closes, color='green', linewidth=1, alpha=1)
             elif difference == 0:
-                plt.plot(dates, closes, color='black', linewidth=.5, alpha=.5)
+                plt.plot(dates, closes, color='black', linewidth=1, alpha=1)
             elif difference < 0:
-                plt.plot(dates, closes, color='red', linewidth=.5, alpha=.5)
+                plt.plot(dates, closes, color='red', linewidth=1, alpha=1)
 
     def broker(self):
         """ I don't need the broker method right now, but I believe I will in
         the future so it is just a placeholder right now"""
         pass
 
-    def optimizer(self, parameters, ranges):
+    def optimizer(self, parameter, guess):
         """I want to implement tensor flow to optimize strategies but for now
         I'm going to settle with some dinky brute force methods"""
-        # for i in range(0,len(parameters)):
-        #     parameter = parameter[i]
+        # for i in guess:
 
         #     for l in range(0, len(self.Closes)):
 
-    def get_results(self):
-        self.strategy()
-        if self.NumberOfPositions > 0:
-            self.sell(len(self.Closes)-1)
-        self.FinalBalance = self.AccountValue
-        self.Gain = (100 * self.AccountValue / self.StartingBalance) - 100
-        print('Your starting balance: %.0f' % self.StartingBalance)
-        print('Your final balance: %.5f' % self.AccountValue)
-        print('Percent Gain: %.5f' % self.Gain)
-
-    def make_plot(self, indicator, path='./figures/',
+    def make_plot(self, path='./figures/',
                   plot_name='ExamplePlot.png'):
 
         plt.figure(figsize=(12, 6))
-        for i in range(0, len(indicator)):
-            indicator[i]()
+
+        if self.Indicators is None:
+            pass
+
+        else:
+            for i in range(0, len(self.Indicators)):
+                self.Indicators[i]()
+
         plt.plot(self.Dates, self.Closes, color=self.ColorValue,
                  label=self.Symbol, linewidth=self.Width)
 
         plt.scatter(self.BuyIndex, self.Buys, label='buys', alpha=.5,
                     color='red')
+
         plt.scatter(self.SellIndex, self.Sells, label='sells', alpha=.5,
                     color='green')
+
         self.lines()
+
         plt.xlabel('Time (s)')
         plt.ylabel('Prices')
         plt.xlim(self.Dates[0], self.Dates[-1])
         plt.ylim(.9*min(self.Closes), 1.1*max(self.Closes))
-
         plt.title('{}'.format(self.StrategyName))
         plt.legend(loc='best')
         plt.savefig(path + plot_name, dpi=self.Resolution)
+
+    def get_results(self):
+        print('Your starting balance: %.0f' % self.StartingBalance)
+        print('Your final balance: %.5f' % self.AccountValue)
+        print('Percent Gain: %.5f' % self.Gain)
+
+    def runner(self):
+        self.strategy()
+        if self.NumberOfPositions > 0:
+            self.sell(len(self.Closes)-1)
+        self.FinalBalance = self.AccountValue
+        self.Gain = (100 * self.AccountValue / self.StartingBalance) - 100
+
+        self.get_results()
+        self.make_plot()
