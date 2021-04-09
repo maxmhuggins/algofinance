@@ -12,8 +12,8 @@ plt.style.use('classic')
 
 class BackTester:
 
-    def __init__(self, closes, dates, starting_balance, strategy, symbol,
-                 strategy_name, indicators=None, plot=True):
+    def __init__(self, closes, dates, starting_balance, strategy, symbol=None,
+                 strategy_name=None, indicators=None, plot=True, path=None):
 
         self.Closes = closes
         self.Dates = dates
@@ -22,6 +22,7 @@ class BackTester:
         self.AccountValue = starting_balance
         self.Indicators = indicators
         self.Plot = plot
+        self.Path = path
         self.NumberOfPositions = 0
         self.Commission = 1 - .01
 
@@ -95,9 +96,13 @@ class BackTester:
 
     #     plt.scatter(optimize_range, self.Gains)
 
-    def make_plot(self, path='../figures/',
-                  plot_name='ExamplePlot.png'):
-
+    def make_plot(self):
+        if self.Path is None:
+            self.Path = './figures/'
+        if self.StrategyName is None:
+            self.StrategyName = 'Unknown Strategy'
+        if self.Symbol is None:
+            self.Symbol = 'Close Data'
         plt.figure(figsize=(12, 6))
 
         if self.Indicators is None:
@@ -124,7 +129,7 @@ class BackTester:
         plt.ylim(.9*min(self.Closes), 1.1*max(self.Closes))
         plt.title('{}'.format(self.StrategyName))
         plt.legend(loc='best')
-        plt.savefig(path + plot_name, dpi=self.Resolution)
+        plt.savefig(self.Path + self.StrategyName, dpi=self.Resolution)
 
     def get_results(self):
         print('Your starting balance: %.0f' % self.StartingBalance)

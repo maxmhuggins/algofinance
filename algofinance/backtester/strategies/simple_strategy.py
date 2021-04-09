@@ -26,24 +26,24 @@ class ExampleStrategy:
                                         self.Dates,
                                         self.StartingBalance,
                                         self.strategy,
-                                        self.Symbol,
-                                        self.StrategyName)
+                                        symbol=self.Symbol,
+                                        strategy_name=self.StrategyName,
+                                        path='../figures/')
 
-    def strategy(self, optimizing_parameter=None):
-        if optimizing_parameter is None:
-            optimizing_parameter = self.N
+    def strategy(self):
+        optimizing_parameter = self.N
 
         backtester = self.BackTester
         percent = .25
         counter = 0
         for i in range(2, len(self.Closes)):
-            close = self.Closes[i]
+            current_close = self.Closes[i]
 
             positions = backtester.NumberOfPositions
 
             if positions == 0:
-                for l in range(0, optimizing_parameter):
-                    if close < self.Closes[i-l]:
+                for previous_value in range(1, optimizing_parameter + 1):
+                    if current_close < self.Closes[i-previous_value]:
                         counter += 1
                     else:
                         counter = 0
@@ -51,8 +51,8 @@ class ExampleStrategy:
                     backtester.buy(percent, i)
 
             elif positions > 0:
-                for l in range(0, 2*optimizing_parameter):
-                    if close > self.Closes[i-l]:
+                for previous_value in range(1, 2*optimizing_parameter+1):
+                    if current_close > self.Closes[i-previous_value]:
                         counter += 1
                     else:
                         counter = 0
@@ -61,18 +61,18 @@ class ExampleStrategy:
 
 
 if __name__ == '__main__':
-    start = '2020-03-02'
-    end = '2021-03-05'
-    symbol = 'BTCUSDT'
+    start = '2021-03-02'
+    end = '2021-04-09'
+    symbol = 'DOGEUSDT'
     dates = (start, end)
-    BTC = dr.DataReader(symbol, 'binance', dates, tick='1d', timeunit='1d')
+    BTC = dr.DataReader(symbol, 'binance', dates, tick='1h')
     Strat = ExampleStrategy(BTC.Closes, BTC.Dates, symbol)
-    Strat.BackTester.runner()
-    # optimize_range = range(1, 10)
-    # for i in optimize_range:
-    #     Strat.HowSmooth = i
-    #     Strat.BackTester.runner()
+    # Strat.BackTester.runner()
+    optimize_range = range(1, 10)
+    for i in optimize_range:
+        Strat.N = i
+        Strat.BackTester.runner()
 
-    # plt.scatter(optimize_range, Strat.BackTester.Gains, marker='x')
-    # plt.plot(optimize_range, Strat.BackTester.Gains, lw=.5)
-    # Strat.BackTester.optimizer()
+    plt.scatter(optimize_range, Strat.BackTester.Gains, marker='x')
+    plt.plot(optimize_range, Strat.BackTester.Gains, lw=.5)
+    Strat.BackTester.optimizer()

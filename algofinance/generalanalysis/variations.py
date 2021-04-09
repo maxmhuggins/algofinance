@@ -89,7 +89,7 @@ class Variations:
         negative_summer = 0
         positive_summer = 0
 
-        for i in range(0,len(variations)):
+        for i in range(0, len(variations)):
             if variations[i] < 0:
                 negative_variation = variations[i]
                 negative_summer += negative_variation
@@ -99,7 +99,7 @@ class Variations:
                 positive_summer += positive_variation
 
         total_variations = abs(negative_summer) + positive_summer
-        
+
         return negative_summer, positive_summer, total_variations
 
     def main(self):

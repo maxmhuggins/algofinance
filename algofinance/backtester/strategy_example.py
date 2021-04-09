@@ -21,14 +21,16 @@ class ExampleStrategy:
         self.StartingBalance = 10000000
         self.StrategyName = ('Under Average Buyer,'
                              + 'Over Average Seller (Example)')
+
         self.Indicators = [self.indicator]
         self.BackTester = bt.BackTester(self.Closes,
                                         self.Dates,
                                         self.StartingBalance,
                                         self.strategy,
-                                        self.Symbol,
-                                        self.StrategyName,
-                                        self.Indicators)
+                                        symbol=self.Symbol,
+                                        strategy_name=self.StrategyName,
+                                        indicators=self.Indicators,
+                                        path='./figures/')
 
     def moving_average(self, start, end):
         timespan = range(start, end)
@@ -83,7 +85,7 @@ if __name__ == '__main__':
     end = '2021-03-05'
     symbol = 'BTCUSDT'
     dates = (start, end)
-    BTC = dr.DataReader(symbol, 'binance', dates, tick='1d', timeunit='1d')
+    BTC = dr.DataReader(symbol, 'binance', dates, tick='1d')
     Strat = ExampleStrategy(BTC.Closes, BTC.Dates, symbol)
     # Strat.BackTester.runner()
     optimize_range = range(1, 10)

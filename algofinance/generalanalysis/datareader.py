@@ -40,13 +40,12 @@ TimeUnits = {'1M': 60*60*24*7*30, '1w': 60*60*24*7, '3d': 60*60*24*3,
 
 class DataReader:
 
-    def __init__(self, symbol, source, daterange, tick='1d', timeunit='1d'):
+    def __init__(self, symbol, source, daterange, tick='1d'):
 
         self.Symbol = symbol
         self.Source = source
         self.Tick = tick
         self.DateRange = daterange
-        self.TimeUnit = TimeUnits[timeunit]
         self.TimeFormat = '%Y-%m-%d'
         self.APIKey = (***REMOVED***
 ***REMOVED***)
