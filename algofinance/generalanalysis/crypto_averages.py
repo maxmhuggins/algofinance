@@ -52,7 +52,7 @@ class CryptoAverages:
         average_closes = np.zeros(1)
         number_of_coins = len(self.CoinSymbols)
         maxes, mins = [], []
-        # plt.figure(figsize=(12, 6))
+        plt.figure(figsize=(12, 6))
 
         for coin in self.CoinSymbols:
             dates, closes = self.make_normal(coin)
@@ -70,7 +70,7 @@ class CryptoAverages:
         plt.xlim(dates[0], dates[-1])
         plt.ylim(.9*min(mins), 1.1*max(maxes))
         plt.legend(loc='best')
-        plt.savefig('./figures/MarketHealth.png', dpi=300)
+        plt.savefig('./figures/MarketHealth.png')
 
         print('Market Average Gain:', average_closes[-1])
 
