@@ -14,6 +14,7 @@ pandas join() function to do this.
 
 import numpy as np
 import matplotlib.pyplot as plt
+from time import strftime, localtime
 import datareader as dr
 import variations as vr
 color_value = '#6b8ba4'
@@ -23,8 +24,8 @@ class CryptoAverages:
 
     def __init__(self):
         self.CoinSymbols = []
-        self.Start = '2020-10-10'
-        self.End = '2021-04-10'  # Make this a today thing
+        self.Start = '2020-09-25'
+        self.End = strftime('%Y-%m-%d', localtime())
         self.Dates = (self.Start, self.End)
 
     def grab_coin_symbols(self):
