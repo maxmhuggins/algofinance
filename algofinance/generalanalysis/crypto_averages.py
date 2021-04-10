@@ -52,7 +52,7 @@ class CryptoAverages:
         average_closes = np.zeros(1)
         number_of_coins = len(self.CoinSymbols)
         maxes, mins = [], []
-        plt.figure(figsize=(12, 6))
+        # plt.figure(figsize=(12, 6))
 
         for coin in self.CoinSymbols:
             dates, closes = self.make_normal(coin)
