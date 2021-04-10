@@ -60,11 +60,8 @@ class Variations:
         normalized_closes = []
 
         for i in range(0, len(self.Closes)):
-            if i == 0:
-                normalized_closes.append(0)
-            else:
-                normalized_close = self.Closes[i]/self.Closes[0]
-                normalized_closes.append(normalized_close)
+            normalized_close = self.Closes[i]/self.Closes[0] - 1
+            normalized_closes.append(normalized_close)
 
         return normalized_closes
 
