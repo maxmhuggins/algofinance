@@ -5,34 +5,57 @@ Created on Fri Apr  9 06:08:57 2021
 
 @author: maxmhuggins
 
-This script will be meant to visualize the crypto market and how it is doing.
-It will iterate through a list of all of the available cryptos, plot their
-closes and then it will also take an average of all of the crypto markets and
-plot that w.r.t. time to visualize the health of the market. Maybe it should
-also look at variations, not sure yet.
+This can now grab all the coins stored in a text file, normalize them using
+the variations module, then plot them seperately. What I would like to do is
+join all of the datasets into a single "average" of them all. I may use
+pandas join() function to do this.
 """
 
 
 import numpy as np
 import matplotlib.pyplot as plt
 import datareader as dr
+import variations as vr
 
-coins = []
 
-columns = np.loadtxt('./data/list_of_cryptos', delimiter=',', skiprows=1,
-                     dtype='str')
+class CryptoAverages:
 
-for column in columns:
-    coins.append(column[0])
+    def __init__(self):
+        self.CoinSymbols = []
+        self.Start = '2021-01-02'
+        self.End = '2021-03-05'  # Make this a today thing
+        self.Dates = (self.Start, self.End)
 
-start = '2021-01-02'
-end = '2021-03-05'
-dates = (start, end)
-BTC = dr.DataReader('BTCUSDT', 'binance', dates, tick='1d')
+    def grab_coin_symbols(self):
+        columns = np.loadtxt('./data/list_of_cryptos', delimiter=',',
+                             skiprows=1, dtype='str')
+        for column in columns:
+            self.CoinSymbols.append(column[0])
 
-for coin in coins:
-    current_coin = dr.DataReader('{}USDT'.format(coin), 'binance', dates,
-                                 tick='1d')
-    plt.plot(current_coin.Dates, current_coin.Closes, label=coin)
-    plt.legend(loc='best')
-    plt.show()
+    def get_data(self, symbol):
+        coin_data = dr.DataReader('{}USDT'.format(symbol), 'binance',
+                                  self.Dates, tick='1d')
+        data = (coin_data.Dates, coin_data.Closes)
+        return data
+
+    def make_normal(self, symbol):
+        dates, closes = self.get_data(symbol)
+        data_variations = vr.Variations(dates, closes, normalized=True)
+        normalized_data = (data_variations.ShiftedDates,
+                           data_variations.ShiftedCloses)
+        return normalized_data
+
+    def make_plot(self):
+        for coin in self.CoinSymbols:
+            dates, closes = self.make_normal(coin)
+            plt.plot(dates, closes, lw=.5)
+            # plt.legend(loc='best')
+        plt.show()
+
+    def main(self):
+        self.grab_coin_symbols()
+        self.make_plot()
+
+
+test = CryptoAverages()
+test.main()
