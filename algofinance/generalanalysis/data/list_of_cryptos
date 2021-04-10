@@ -3,7 +3,6 @@ BTC,Bitcoin
 LINK,ChainLink
 ETH,Ethereum
 BNB,BNB
-USDT,TetherUS
 ADA,Cardano
 ZEN,Horizen
 OXT,Orchid
@@ -13,7 +12,6 @@ UNI,Uniswap
 SOL,Solana
 STORJ,Storj
 BAND,Band Protocol
-DAI,DAI
 MKR,Maker
 HNT,Helium
 COMP,Compound
@@ -49,6 +47,5 @@ BAT,Basic Attention Token
 XLM,Stellar Lumens
 LTC,Litecoin
 NEO,NEO
-BCHA,Bitcoin Cash ABC
 MANA,Decentraland
 MATIC,Matic Network
