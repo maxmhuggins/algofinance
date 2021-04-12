@@ -3,7 +3,7 @@
 """
 Created on Fri Feb 26 20:16:04 2021
 
-@author: max
+@author: maxmhuggins
 
 The class DataReader serves the purpose to take an input of information,
 specifically symbol, source, daterange, and ticker, and output two numpy
@@ -23,6 +23,7 @@ from binance.client import Client
 import yfinance as yf
 import time
 import numpy as np
+
 
 TimeFormats = {
     'yahoo': {
@@ -107,7 +108,7 @@ class DataReader:
 
 
 """
-- Fix the slowness and optimize a little
+- I would like a way to optionally save a csv file of the output
 
 - Write documentation and comment out
 """

@@ -17,11 +17,15 @@ def main():
     start = '2020-02-05'
     end = '2021-03-05'
     dates = (start, end)
-    BTC = dr.DataReader('BTCUSDT', 'binance', dates, tick='1d')
+    BTC = dr.DataReader('BTCUSDT', 'binance', dates)
     BTCVariations = vr.Variations(BTC.Dates, BTC.Closes, normalized=True)
 
     plt.bar(BTCVariations.Dates, BTCVariations.Variations)
     plt.xlim(BTCVariations.Dates[0], BTCVariations.Dates[-1])
+    plt.show()
+    plt.plot(BTCVariations.ShiftedDates, BTCVariations.ShiftedCloses)
+    plt.xlim(BTCVariations.ShiftedDates[0], BTCVariations.ShiftedDates[-1])
+    plt.show()
 
 
 if __name__ == '__main__':

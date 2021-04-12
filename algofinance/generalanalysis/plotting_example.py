@@ -27,13 +27,13 @@ color_value = '#6b8ba4'
 start = '2020-04-03'
 end = '2021-04-03'
 dates = (start, end)
-BTC = dr.DataReader('BTCUSDT', 'binance', dates, '1d')
+BTC = dr.DataReader('BTCUSDT', 'binance', dates)
 BTCVariations = vr.Variations(BTC.Dates, BTC.Closes, normalized=True)
 
-STORJ = dr.DataReader('STORJUSDT', 'binance', dates, '1d')
+STORJ = dr.DataReader('STORJUSDT', 'binance', dates)
 STORJVariations = vr.Variations(STORJ.Dates, STORJ.Closes, normalized=True)
 
-ETH = dr.DataReader('ETHUSDT', 'binance', dates, '1d')
+ETH = dr.DataReader('ETHUSDT', 'binance', dates)
 ETHVariations = vr.Variations(ETH.Dates, ETH.Closes, normalized=True)
 # ========================================================================== #
 max_variations = [max(BTCVariations.Variations),
@@ -158,7 +158,9 @@ plt.ylim(-abs_max_variations, abs_max_variations)
 plt.legend(loc='best', fontsize=legendfont)
 plt.savefig('./figures/VariationsExamplePlot.png', dpi=resolution)
 # ========================================================================== #
-print('Negative Variations for STORJ: %.2f' % STORJVariations.NegativeVariations)
-print('Positive Variations for STORJ: %.2f' % STORJVariations.PositiveVariations)
-print('Total Variations for STORJ: %.2f' % STORJVariations.TotalVariations)
-
+print('Negative Variations for STORJ: %.2f'
+      % STORJVariations.NegativeVariations)
+print('Positive Variations for STORJ: %.2f'
+      % STORJVariations.PositiveVariations)
+print('Total Variations for STORJ: %.2f'
+      % STORJVariations.TotalVariations)

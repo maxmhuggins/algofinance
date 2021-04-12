@@ -106,10 +106,3 @@ class Variations:
 
         else:
             return self.normalized_variations()
-
-
-"""
-Need way to grab the from shifted lists for plotting, but don't
-want to have to run the function twice to get them
-    Maybe this should just be a seperate class?
-"""
