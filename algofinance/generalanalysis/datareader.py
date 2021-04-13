@@ -30,6 +30,28 @@ from APIKeys import APIKey, APISecret
 class DataReader:
     """
     Extracts market data from binance and yahoo.
+
+    ...
+
+    Attributes
+    ----------
+    Symbol : str
+        Ticker symbol from respective source.
+    Source : str
+        Place where data is sourced.
+    Tick : str
+        Resolution of the acquired data.
+    DateRange : str
+        The range of dates the data will span.
+    TimeFormat : str
+        String format for dates.
+    APIKey : str
+        Key provided by Binance for collecting data.
+    APISecret : str
+        Secret key specific to a user on Binance for collecting data.
+    BClient : class
+        Binance's API for accessing their data
+
     """
 
     def __init__(self, symbol, source, daterange, tick='1d'):
@@ -46,6 +68,15 @@ class DataReader:
         self.main()
 
     def yahoo_extractor(self):
+        """
+        Gathers market data from yahoo finance.
+
+        Returns
+        -------
+        numpy.ndarray
+            Time and closing data for specified range.
+
+        """
         start = time.strptime('{}'.format(self.DateRange[0]), self.TimeFormat)
         end = time.strptime('{}'.format(self.DateRange[1]), self.TimeFormat)
         start = time.mktime(start)
