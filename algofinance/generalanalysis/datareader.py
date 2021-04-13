@@ -23,24 +23,13 @@ from binance.client import Client
 import yfinance as yf
 import time
 import numpy as np
-
-
-TimeFormats = {
-    'yahoo': {
-        'Date': '%Y-%m-%d %H:%M:%S', 'Close': 'Close', 'Timestamp': 'Date'
-        },
-    'binance': {
-        'Date': '%Y-%m-%d %H:%M:%S', 'Close': 'close', 'Timestamp': 'timestamp'
-        }
-    }
-
-TimeUnits = {'1M': 60*60*24*7*30, '1w': 60*60*24*7, '3d': 60*60*24*3,
-             '1d': 60*60*24, '12h': 60*60*12, '1h': 60*60, '1m': 60
-             }
+from dictionaries import TimeUnits, TimeFormats
 
 
 class DataReader:
-
+    """
+    Extracts market data from binance and yahoo.
+    """
     def __init__(self, symbol, source, daterange, tick='1d'):
 
         self.Symbol = symbol
