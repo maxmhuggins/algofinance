@@ -17,7 +17,6 @@ f.e. February 26, 2019 to January 15, 2020 is represented by:
  (2019-02-26, 2020-01-15)
 
 """
-
 import pandas as pd
 from binance.client import Client
 import yfinance as yf
@@ -49,7 +48,7 @@ class DataReader:
         Key provided by Binance for collecting data.
     APISecret : str
         Secret key specific to a user on Binance for collecting data.
-    BClient : class
+    BClient : class 'binance.client.Client'
         Binance's API for accessing their data
 
     """
@@ -73,14 +72,18 @@ class DataReader:
 
         Returns
         -------
-        numpy.ndarray
+        numpy.ndarray, numpy.ndarray
             Time and closing data for specified range.
 
         """
+
         start = time.strptime('{}'.format(self.DateRange[0]), self.TimeFormat)
         end = time.strptime('{}'.format(self.DateRange[1]), self.TimeFormat)
+        # start and end are made into struct_times
+
         start = time.mktime(start)
         end = time.mktime(end) + (TimeUnits[self.Tick])
+        # start and end are made into 
 
         start = time.strftime(self.TimeFormat, time.gmtime(start))
         end = time.strftime(self.TimeFormat, time.gmtime(end))
