@@ -24,12 +24,14 @@ import yfinance as yf
 import time
 import numpy as np
 from dictionaries import TimeUnits, TimeFormats
+from APIKeys import APIKey, APISecret
 
 
 class DataReader:
     """
     Extracts market data from binance and yahoo.
     """
+
     def __init__(self, symbol, source, daterange, tick='1d'):
 
         self.Symbol = symbol
@@ -37,10 +39,8 @@ class DataReader:
         self.Tick = tick
         self.DateRange = daterange
         self.TimeFormat = '%Y-%m-%d'
-        self.APIKey = (***REMOVED***
-***REMOVED***)
-        self.APISecret = (***REMOVED***
-***REMOVED***)
+        self.APIKey = APIKey
+        self.APISecret = APISecret
         self.BClient = Client(api_key=self.APIKey, api_secret=self.APISecret)
 
         self.main()
