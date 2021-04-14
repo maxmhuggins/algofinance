@@ -3,9 +3,10 @@
 """
 Created on Mon Mar  8 18:13:55 2021
 
+This is an example of the proper usage for the datareader module.
+
 @author: maxmhuggins
 
-This is an example of the proper usage for the DataReader class
 """
 
 import datareader as dr
