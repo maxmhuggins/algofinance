@@ -19,23 +19,16 @@ The general scope of algofinance includes development for an algorithm trading b
 
 Getting Started
 ---------------
-If, somehow, you have found yourself interested enough in the project to get this far you can start with installing the module. This is done simply enough by running:
+Contact Me
+^^^^^^^^^^
+If, somehow, you have found yourself interested enough in the project to get this far you can get involved by contacting me directly at: max.huggins89@gmail.com
 
-.. code:: bash
-
-    pip install algofinance
-
-Or, if you're interested in contributing to the project clone this repository and begin making changes and additions. Use the command:
-
-.. code:: bash
-
-    git clone https://github.com/maxmhuggins/algofinance
-
-Now, you have a copy of this project's git repository.
+Project Overview
+^^^^^^^^^^^^^^^^
+This project is comprised of three main packages: backtester, generalanalysis, and research. Let's start with generalanalysis.
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-    .. automodule:: datareader
-        :members:
 
+   modules

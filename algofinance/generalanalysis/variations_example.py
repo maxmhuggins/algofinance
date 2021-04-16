@@ -20,8 +20,9 @@ def main():
     BTC = dr.DataReader('BTCUSDT', 'binance', dates)
     BTCVariations = vr.Variations(BTC.Dates, BTC.Closes, normalized=True)
 
-    plt.bar(BTCVariations.Dates, BTCVariations.Variations)
+    plt.plot(BTCVariations.Dates, BTCVariations.Variations)
     plt.xlim(BTCVariations.Dates[0], BTCVariations.Dates[-1])
+    plt.ylim(min(BTCVariations.Variations), max(BTCVariations.Variations))
     plt.show()
     plt.plot(BTCVariations.ShiftedDates, BTCVariations.ShiftedCloses)
     plt.xlim(BTCVariations.ShiftedDates[0], BTCVariations.ShiftedDates[-1])

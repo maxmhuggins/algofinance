@@ -84,9 +84,12 @@ class DataReader:
 
         Returns
         -------
-        tuple
-            Tuple containing time and closing data as numpy arrays for
-            specified range.
+        dates : np.array
+            Array of time data provided by Yahoo Finance for the specified
+            time interval
+        closes : np.array
+            Array of closing data provided by Yahoo Finance for the specified
+            time interval
 
         """
 
@@ -112,7 +115,9 @@ class DataReader:
         dates = [dates[date]/1e9 for date in range(0, len(dates))]  # ns to s
         # Data gets made into useful format for my purposes
 
-        return np.array(dates), np.array(closes)
+        dates, closes = np.array(dates), np.array(closes)
+
+        return dates, closes
 
     def binance_extractor(self):
         """
@@ -120,9 +125,12 @@ class DataReader:
 
         Returns
         -------
-        tuple
-            Tuple containing time and closing data as numpy arrays for
-            specified range.
+        dates : np.array
+            Array of time data provided by Binance for the specified
+            time interval
+        closes : np.array
+            Array of closing data provided by Binance for the specified
+            time interval
 
         """
 
@@ -154,7 +162,9 @@ class DataReader:
         dates = [dates[date]/1e3 for date in range(0, len(dates))]  # ms to s
         # Data gets made into useful format for my purposes
 
-        return np.array(dates), np.array(closes)
+        dates, closes = np.array(dates), np.array(closes)
+
+        return dates, closes
 
     def csv(self):
         # TODO: would optionally like to be able to save a simple csv for
