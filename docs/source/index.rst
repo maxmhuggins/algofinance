@@ -21,7 +21,8 @@ Getting Started
 ---------------
 Contact Me
 ^^^^^^^^^^
-If, somehow, you have found yourself interested enough in the project to get this far you can get involved by contacting me directly at: max.huggins89@gmail.com
+If, somehow, you have found yourself interested enough in the project to get this far you can get involved by contacting me directly at:
+max.huggins89@gmail.com
 
 Project Overview
 ^^^^^^^^^^^^^^^^
