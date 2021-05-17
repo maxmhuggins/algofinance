@@ -3,12 +3,11 @@
 """
 Created on Fri Apr  9 06:08:57 2021
 
-@author: maxmhuggins
+The crypto_averages module grabs all of the crypto market data available from
+binance, plots it, and makes an average line for it all. The purpose is to
+get an idea of the market "health"
 
-This can now grab all the coins stored in a text file, normalize them using
-the variations module, then plot them seperately. What I would like to do is
-join all of the datasets into a single "average" of them all. I may use
-pandas join() function to do this.
+@author: maxmhuggins
 """
 
 
@@ -59,6 +58,7 @@ class CryptoAverages:
             dates, closes = self.make_normal(coin)
             maxes.append(max(closes))
             mins.append(min(closes))
+            print(coin, max(closes))
             average_closes = average_closes + np.array(closes)
 
             plt.plot(dates, closes, color='black', lw=.5, alpha=.3)
