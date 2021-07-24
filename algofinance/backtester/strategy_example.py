@@ -6,8 +6,9 @@ Created on Sat Apr  3 08:10:57 2021
 @author: maxmhuggins
 """
 
+from algofinance.generalanalysis.datareader import DataReader as dr
 import backtester as bt
-import datareader as dr
+# import datareader as dr
 import matplotlib.pyplot as plt
 
 
@@ -81,7 +82,7 @@ class ExampleStrategy:
 
 
 if __name__ == '__main__':
-    start = '2020-03-02'
+    start = '2021-03-02'
     end = '2021-03-05'
     symbol = 'BTCUSDT'
     dates = (start, end)
